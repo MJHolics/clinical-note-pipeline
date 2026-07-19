@@ -9,6 +9,12 @@ from __future__ import annotations
 
 from .dialogue import Case
 from .extract import ClinicalNote
+from .relations import (
+    detect_negations,
+    extract_relations,
+    negation_recall,
+    relation_prf,
+)
 
 
 def prf(gold: set[str], pred: set[str]) -> dict:
@@ -39,11 +45,18 @@ def score_note(case: Case, pred: ClinicalNote, transcript: str = "") -> dict:
             if e not in gold.entities() and (transcript and e not in transcript):
                 hall += 1
     hall_rate = hall / len(pred.entities()) if pred.entities() else 0.0
+    # 관계 추출(RE) + 부정 처리 채점
+    pred_rels = extract_relations(pred, transcript)
+    rel = relation_prf(case.gold_relations(), pred_rels)
+    neg_rec = negation_recall(set(case.negated_symptoms),
+                              detect_negations(transcript, list(case.negated_symptoms)))
     return {
         "case_id": case.case_id,
         "f1": overall["f1"], "precision": overall["precision"], "recall": overall["recall"],
         "symptom_recall": sx["recall"], "med_recall": meds["recall"],
         "hallucination_rate": round(hall_rate, 4),
+        "relation_f1": rel["f1"], "relation_recall": rel["recall"],
+        "negation_recall": round(neg_rec, 4),
     }
 
 
@@ -51,5 +64,6 @@ def aggregate(scores: list[dict]) -> dict:
     """케이스 점수들을 평균."""
     if not scores:
         return {}
-    keys = ["f1", "precision", "recall", "symptom_recall", "med_recall", "hallucination_rate"]
+    keys = ["f1", "precision", "recall", "symptom_recall", "med_recall", "hallucination_rate",
+            "relation_f1", "relation_recall", "negation_recall"]
     return {k: round(sum(s[k] for s in scores) / len(scores), 4) for k in keys}

@@ -57,11 +57,12 @@ def sweep() -> dict:
     rows_fuzzy = [run_at_noise(t, general_er=0.05, fuzzy=0.7) for t in levels]
     print("의료용어 오류가 진료기록 품질로 전파되는 정도 (8 케이스 평균)\n")
     print(f"{'term_er':>8} | {'obs_WER':>7} {'obs_TER':>7} | "
-          f"{'exact F1':>8} {'약물 recall':>10} | {'fuzzy F1':>8} {'환각율':>6}")
-    print("-" * 74)
+          f"{'개체 F1':>7} {'약물rec':>7} {'관계 F1':>7} | {'fuzzy F1':>8} {'부정rec':>7}")
+    print("-" * 80)
     for e, fz in zip(rows_exact, rows_fuzzy):
         print(f"{e['set_term_er']:>8.2f} | {e['obs_wer']:>7.3f} {e['obs_term_er']:>7.3f} | "
-              f"{e['f1']:>8.3f} {e['med_recall']:>10.3f} | {fz['f1']:>8.3f} {e['hallucination_rate']:>6.3f}")
+              f"{e['f1']:>7.3f} {e['med_recall']:>7.3f} {e['relation_f1']:>7.3f} | "
+              f"{fz['f1']:>8.3f} {e['negation_recall']:>7.3f}")
     # 핵심 수치 요약
     base_f1 = rows_exact[0]["f1"]
     worst = rows_exact[-1]

@@ -14,6 +14,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 
 from .dialogue import CASES
+from .relations import detect_negations
 
 
 @dataclass(frozen=True)
@@ -88,7 +89,10 @@ class RuleExtractor:
         self.fuzzy = fuzzy
 
     def extract(self, transcript: str) -> ClinicalNote:
-        sx = _drop_nested([t for t in self.lex["symptoms"] if match_entity(t, transcript, self.fuzzy)])
+        found = [t for t in self.lex["symptoms"] if match_entity(t, transcript, self.fuzzy)]
+        # 부정(negation) 처리: '통증은 없습니다'로 부정된 증상은 기록에서 제외(임상 안전).
+        negated = detect_negations(transcript, found)
+        sx = _drop_nested([t for t in found if t not in negated])
         meds = _drop_nested([t for t in self.lex["medications"] if match_entity(t, transcript, self.fuzzy)])
         dx = next((t for t in self.lex["diagnosis"] if match_entity(t, transcript, self.fuzzy)), "")
         return ClinicalNote(symptoms=sx, medications=meds, diagnosis=dx)

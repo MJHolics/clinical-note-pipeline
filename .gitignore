@@ -1,4 +1,5 @@
 __pycache__/
 *.pyc
 outputs/*.json
+outputs/audio/
 .pytest_cache/

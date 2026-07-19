@@ -1,0 +1,7 @@
+# 핵심 파이프라인·실험은 표준 라이브러리만으로 실행됨(키·오디오·설치 불필요).
+# 아래는 선택적 실제 백엔드용.
+matplotlib        # 오류 전파 곡선 플롯(없으면 JSON만 저장)
+pytest            # 단위테스트
+
+# 선택(실제 ASR): pip install faster-whisper
+# 선택(실제 추출 LLM): google-genai  (무료 Gemini API 키, AI Studio)

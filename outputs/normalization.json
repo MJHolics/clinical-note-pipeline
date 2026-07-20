@@ -1,0 +1,156 @@
+{
+  "real_ablation": {
+    "① 정규화 없음 (exact)": {
+      "f1": 0.5378,
+      "precision": 0.875,
+      "recall": 0.3973,
+      "symptom_recall": 0.5938,
+      "med_recall": 0.125,
+      "hallucination_rate": 0.0,
+      "relation_f1": 0.2055,
+      "relation_recall": 0.1518,
+      "negation_recall": 0.625,
+      "term_er": 0.6027,
+      "n_corrections": 0
+    },
+    "② 기존 퍼지 매칭(문자)": {
+      "f1": 0.5925,
+      "precision": 0.8708,
+      "recall": 0.4621,
+      "symptom_recall": 0.6979,
+      "med_recall": 0.1667,
+      "hallucination_rate": 0.0667,
+      "relation_f1": 0.1956,
+      "relation_recall": 0.1518,
+      "negation_recall": 0.625,
+      "term_er": 0.6027,
+      "n_corrections": 0
+    },
+    "③ L1 자모 정규화만": {
+      "f1": 0.6549,
+      "precision": 0.9375,
+      "recall": 0.5156,
+      "symptom_recall": 0.7917,
+      "med_recall": 0.1875,
+      "hallucination_rate": 0.0,
+      "relation_f1": 0.2652,
+      "relation_recall": 0.2054,
+      "negation_recall": 0.75,
+      "term_er": 0.4844,
+      "n_corrections": 9
+    },
+    "④ L2 음차 골격만": {
+      "f1": 0.666,
+      "precision": 0.9062,
+      "recall": 0.5469,
+      "symptom_recall": 0.5938,
+      "med_recall": 0.5208,
+      "hallucination_rate": 0.0,
+      "relation_f1": 0.2428,
+      "relation_recall": 0.2031,
+      "negation_recall": 0.625,
+      "term_er": 0.4531,
+      "n_corrections": 11
+    },
+    "⑤ L1+L2 (제안)": {
+      "f1": 0.7683,
+      "precision": 0.925,
+      "recall": 0.6652,
+      "symptom_recall": 0.7917,
+      "med_recall": 0.5833,
+      "hallucination_rate": 0.0,
+      "relation_f1": 0.3024,
+      "relation_recall": 0.2567,
+      "negation_recall": 0.75,
+      "term_er": 0.3348,
+      "n_corrections": 20
+    },
+    "⑥ L1+L2 + 퍼지": {
+      "f1": 0.7698,
+      "precision": 0.9042,
+      "recall": 0.6808,
+      "symptom_recall": 0.7917,
+      "med_recall": 0.625,
+      "hallucination_rate": 0.0208,
+      "relation_f1": 0.2949,
+      "relation_recall": 0.2567,
+      "negation_recall": 0.75,
+      "term_er": 0.3348,
+      "n_corrections": 20
+    }
+  },
+  "overcorrection": {
+    "harmful": 0,
+    "harmless": 0,
+    "tokens": 385,
+    "examples": []
+  },
+  "threshold_sweep": {
+    "rows": [
+      {
+        "jamo": 0.6,
+        "skeleton": 0.45,
+        "f1": 0.7137,
+        "med_recall": 0.8542,
+        "relation_f1": 0.5463,
+        "harmful_overcorrections": 34
+      },
+      {
+        "jamo": 0.65,
+        "skeleton": 0.5,
+        "f1": 0.6832,
+        "med_recall": 0.8542,
+        "relation_f1": 0.2712,
+        "harmful_overcorrections": 31
+      },
+      {
+        "jamo": 0.7,
+        "skeleton": 0.55,
+        "f1": 0.7619,
+        "med_recall": 0.8125,
+        "relation_f1": 0.2907,
+        "harmful_overcorrections": 7
+      },
+      {
+        "jamo": 0.75,
+        "skeleton": 0.6,
+        "f1": 0.7707,
+        "med_recall": 0.75,
+        "relation_f1": 0.2955,
+        "harmful_overcorrections": 7
+      },
+      {
+        "jamo": 0.8,
+        "skeleton": 0.65,
+        "f1": 0.7917,
+        "med_recall": 0.625,
+        "relation_f1": 0.3063,
+        "harmful_overcorrections": 2
+      },
+      {
+        "jamo": 0.85,
+        "skeleton": 0.7,
+        "f1": 0.7683,
+        "med_recall": 0.5833,
+        "relation_f1": 0.3024,
+        "harmful_overcorrections": 0
+      },
+      {
+        "jamo": 0.9,
+        "skeleton": 0.8,
+        "f1": 0.7125,
+        "med_recall": 0.5208,
+        "relation_f1": 0.2428,
+        "harmful_overcorrections": 0
+      }
+    ],
+    "operating_point": {
+      "jamo": 0.85,
+      "skeleton": 0.7,
+      "f1": 0.7683,
+      "med_recall": 0.5833,
+      "relation_f1": 0.3024,
+      "harmful_overcorrections": 0
+    }
+  }
+}

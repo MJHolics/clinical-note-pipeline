@@ -1,5 +1,6 @@
 __pycache__/
 *.pyc
-outputs/*.json
+# 실측 산출물은 커밋한다 — real_asr.json은 normalize_report.py의 입력이라
+# 이게 없으면 클론한 사람이 정규화 실험을 재현할 수 없다(합성 대화라 PHI 없음).
 outputs/audio/
 .pytest_cache/

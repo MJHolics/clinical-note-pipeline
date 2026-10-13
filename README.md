@@ -17,7 +17,7 @@
 > **"없던 약을 만들지 않는다"는 안전 제약**으로 골랐다(④-e).
 
 ## ① 목표·이유
-네이버 등 **AI 진료기록 생성** 과제의 코어 = 대화→기록 변환의 성능 고도화. 이런 캐스케이드
+**AI 진료기록 생성** 과제의 코어 = 대화→기록 변환의 성능 고도화. 이런 캐스케이드
 파이프라인(ASR→NER/추출→구조화)의 실무 난제는 **단계 간 오류 전파**다. 앞단 ASR이 약물명 하나를
 틀리면 뒷단이 아무리 좋아도 그 약은 기록에서 사라진다. "무엇이 최종 품질을 결정하는가"를
 *추측이 아니라 통제 실험*으로 답하는 것이 목표.
@@ -36,8 +36,8 @@
 | **결정적 오류 주입 시뮬** | 실제 Whisper는 무작위·환경 의존이라 인과 분리가 어렵다. 용어/일반 오류율을 *독립 제어*하는 결정적 시뮬로 전파를 인과적으로 측정(실제 Whisper는 `--whisper` 선택 훅) |
 | **개체 P/R/F1 + 환각율** | 누락(recall↓, 처방 누락 위험)과 환각(없는 개체 지어냄, 오진 위험)을 분리 — 임상 안전의 두 실패 모드 |
 | **longest-match-wins 중첩 해소** | '야간 기침'이 있으면 부분인 '기침'은 버림(nested entity, NER 표준) — 오탐 방지 |
-| **관계추출(RE)+부정+시점** | 네이버 Required가 NER**/RE** — 개체만이 아니라 INDICATES/TREATS/ONSET 관계 복원. 부정('없음')은 임상 안전 직결이라 제외 |
-| **LangGraph 오케스트레이션** | 단계를 명시적 StateGraph로 엮고 검증 노드가 needs_human 게이트 — "불확실하면 사람에게"(임상 필수) + Preferred 스킬 |
+| **관계추출(RE)+부정+시점** | 임상 정보추출은 NER**/RE**가 한 쌍 — 개체만이 아니라 INDICATES/TREATS/ONSET 관계 복원. 부정('없음')은 임상 안전 직결이라 제외 |
+| **LangGraph 오케스트레이션** | 단계를 명시적 StateGraph로 엮고 검증 노드가 needs_human 게이트 — "불확실하면 사람에게"(임상 필수) |
 
 ## ④ 성능 비교 (실측 — 8 케이스 평균, 결정적)
 의료용어 오류율(term_er)을 스윕하며 최종 진료기록 개체 F1이 무너지는 곡선(`python run_pipeline.py`):
@@ -68,7 +68,7 @@
 > 구조적 통찰**이다(아래 ④-b에서 실제 Whisper로 이 전제를 검증).
 
 ## ④-b 관계 추출(RE)·부정·시점 — NER을 넘어선 임상 정보추출 (실측)
-네이버 Required가 "Entity Recognition **/ Relation Extraction** 등의 NLP"라 개체만이 아니라 **관계**를
+임상 정보추출은 Entity Recognition만이 아니라 **Relation Extraction**까지라, 개체만이 아니라 **관계**를
 복원한다: 증상 `INDICATES` 진단 · 약물 `TREATS` 진단 · 진단 `ONSET` 시점. 그리고 임상 안전에 직결되는
 **부정(negation)** — '통증은 없습니다'를 개체로 뽑으면 오진이므로 제외한다.
 
@@ -169,7 +169,7 @@ L2가 별도로 필요한 이유가 수치로 분명하다: `salbutamol`과 `셀
     - 내가 처음 눈대중으로 잡은 0.75/0.60은 F1이 더 높았지만(0.771) 유해 오교정 7건이라 **기각**됐다.
 
 ## ④-d 오케스트레이션 — LangGraph StateGraph (ASR→추출→관계→검증 게이트)
-흩어진 단계를 **명시적 상태 그래프**로 엮는다(`pipeline/orchestrate.py`, 네이버 Preferred: LangGraph):
+흩어진 단계를 **명시적 상태 그래프**로 엮는다(`pipeline/orchestrate.py`, LangGraph):
 `asr → normalize → extract → relations → validate → END`. 정규화 노드는 적용한 교정을 `corrections`로
 상태에 남겨 **감사 추적**이 되게 한다(임상 시스템은 자동 교정을 조용히 하면 안 된다 — 무엇을 무엇으로
 왜 바꿨는지가 남아야 검토·책임 추적이 가능). 마지막 검증 노드가 **needs_human 게이트**를 건다 —
@@ -265,4 +265,3 @@ python real_asr.py                # 실제 TTS→Whisper WER (pip install faster
 `pipeline/orchestrate.py`가 위를 LangGraph StateGraph로 엮는다. 평가=개체 P/R/F1·관계 F1·부정 recall·환각율.
 정규화 교정 이력은 상태의 `corrections`에 남아 감사 추적된다.
 
-관련: [[decision-log-and-tradeoffs]] · 네이버 진료기록생성 공고 정조준(NER/RE·ASR·Clinical NLP 갭 축소)

@@ -1,6 +1,6 @@
 """LangGraph 오케스트레이션 — ASR→추출(NER)→관계추출(RE)→검증을 StateGraph로.
 
-네이버 Preferred(LangGraph). 지금까지의 단계(asr·extract·relations·evaluate)를 흩어진 함수가 아니라
+지금까지의 단계(asr·extract·relations·evaluate)를 흩어진 함수가 아니라
 **명시적 상태 그래프**로 엮어, 각 노드가 상태를 갱신하고 마지막 검증 노드가 **needs_human 게이트**를
 건다(inspection-copilot supervisor 패턴 재사용). 임상 시스템의 요건 = "불확실하면 사람에게".
 

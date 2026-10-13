@@ -1,6 +1,6 @@
 """관계 추출(RE) + 부정(negation) + 시점(temporal) — NER을 넘어선 임상 정보추출.
 
-네이버 Required가 "Entity Recognition **/ Relation Extraction** 등의 NLP"라 개체만이 아니라 **관계**를
+임상 정보추출은 Entity Recognition만이 아니라 **Relation Extraction**까지라, 개체만이 아니라 **관계**를
 복원해야 한다. 진료 대화에서:
   - INDICATES : 증상 → 진단(증상이 진단을 시사)
   - TREATS    : 약물 → 진단(약물이 진단을 치료)
